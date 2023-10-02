@@ -71,6 +71,15 @@ public partial class @SphereControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Shoot"",
+                    ""type"": ""Button"",
+                    ""id"": ""88cfb716-a919-4177-af69-7c6adbe22089"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -216,6 +225,28 @@ public partial class @SphereControls: IInputActionCollection2, IDisposable
                     ""action"": ""JoystickAim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""766a8661-0ddd-4e26-857f-c2c3d55eb70e"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""759885f9-60a0-44f5-9e51-15e15938a78e"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -257,6 +288,7 @@ public partial class @SphereControls: IInputActionCollection2, IDisposable
         m_Sphere_WeaponSwitch = m_Sphere.FindAction("WeaponSwitch", throwIfNotFound: true);
         m_Sphere_Stop = m_Sphere.FindAction("Stop", throwIfNotFound: true);
         m_Sphere_AutoAim = m_Sphere.FindAction("AutoAim", throwIfNotFound: true);
+        m_Sphere_Shoot = m_Sphere.FindAction("Shoot", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -323,6 +355,7 @@ public partial class @SphereControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Sphere_WeaponSwitch;
     private readonly InputAction m_Sphere_Stop;
     private readonly InputAction m_Sphere_AutoAim;
+    private readonly InputAction m_Sphere_Shoot;
     public struct SphereActions
     {
         private @SphereControls m_Wrapper;
@@ -332,6 +365,7 @@ public partial class @SphereControls: IInputActionCollection2, IDisposable
         public InputAction @WeaponSwitch => m_Wrapper.m_Sphere_WeaponSwitch;
         public InputAction @Stop => m_Wrapper.m_Sphere_Stop;
         public InputAction @AutoAim => m_Wrapper.m_Sphere_AutoAim;
+        public InputAction @Shoot => m_Wrapper.m_Sphere_Shoot;
         public InputActionMap Get() { return m_Wrapper.m_Sphere; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -356,6 +390,9 @@ public partial class @SphereControls: IInputActionCollection2, IDisposable
             @AutoAim.started += instance.OnAutoAim;
             @AutoAim.performed += instance.OnAutoAim;
             @AutoAim.canceled += instance.OnAutoAim;
+            @Shoot.started += instance.OnShoot;
+            @Shoot.performed += instance.OnShoot;
+            @Shoot.canceled += instance.OnShoot;
         }
 
         private void UnregisterCallbacks(ISphereActions instance)
@@ -375,6 +412,9 @@ public partial class @SphereControls: IInputActionCollection2, IDisposable
             @AutoAim.started -= instance.OnAutoAim;
             @AutoAim.performed -= instance.OnAutoAim;
             @AutoAim.canceled -= instance.OnAutoAim;
+            @Shoot.started -= instance.OnShoot;
+            @Shoot.performed -= instance.OnShoot;
+            @Shoot.canceled -= instance.OnShoot;
         }
 
         public void RemoveCallbacks(ISphereActions instance)
@@ -417,5 +457,6 @@ public partial class @SphereControls: IInputActionCollection2, IDisposable
         void OnWeaponSwitch(InputAction.CallbackContext context);
         void OnStop(InputAction.CallbackContext context);
         void OnAutoAim(InputAction.CallbackContext context);
+        void OnShoot(InputAction.CallbackContext context);
     }
 }

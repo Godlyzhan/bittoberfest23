@@ -9,15 +9,9 @@ public class SphereMovement : MonoBehaviour
 
     private new Rigidbody rigidbody;
 
-    void Start()
-    {
-        rigidbody = GetComponent<Rigidbody>();
-    }
+    void Start() => rigidbody = GetComponent<Rigidbody>();
+    void FixedUpdate() => ForceMovement();
 
-    void FixedUpdate()
-    {
-        ForceMovement();
-    }
 
     private void ForceMovement()
     {
