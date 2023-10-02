@@ -8,6 +8,8 @@ public class WeaponStats : ScriptableObject
     public float FireRate;
     public float BulletSpeed;
     public float ImpactForce;
+    public float Damage;
+    public float Cooldown;
     public GameObject prefab;
     public AnimatorOverrideController AnimatorOverrideController;
 }

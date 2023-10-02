@@ -4,7 +4,8 @@ using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour, SphereControls.ISphereActions
 {
-    public event Action WeaponSwitchEvent;
+    public event Action NextWeaponSwitchEvent;
+    public event Action PreviousWeaponSwitchEvent;
     public event Action ShootEvent;
     public Vector2 MovementValue { get; private set; }
     public Vector2 AimValue { get; private set; }
@@ -13,10 +14,14 @@ public class InputHandler : MonoBehaviour, SphereControls.ISphereActions
 
     public void OnMove(InputAction.CallbackContext context) => MovementValue = context.ReadValue<Vector2>();
     public void OnJoystickAim(InputAction.CallbackContext context) => AimValue = context.ReadValue<Vector2>();
-
-    public void OnWeaponSwitch(InputAction.CallbackContext context)
+    public void OnNextWeapon(InputAction.CallbackContext context)
     {
-        if (context.performed) WeaponSwitchEvent?.Invoke();
+        if (context.performed) NextWeaponSwitchEvent?.Invoke();
+    }
+
+    public void OnPreviousWeapon(InputAction.CallbackContext context)
+    {
+        if (context.performed) PreviousWeaponSwitchEvent?.Invoke();
     }
 
     public void OnShoot(InputAction.CallbackContext context)

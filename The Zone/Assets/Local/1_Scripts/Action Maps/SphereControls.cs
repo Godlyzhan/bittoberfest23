@@ -46,13 +46,22 @@ public partial class @SphereControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""WeaponSwitch"",
+                    ""name"": ""NextWeapon"",
                     ""type"": ""Button"",
                     ""id"": ""ae7e7eb8-5faa-4c88-90f4-1bc04351152a"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PreviousWeapon"",
+                    ""type"": ""Button"",
+                    ""id"": ""22d4dd72-72a0-48a2-8199-2f9ea792af9a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Stop"",
@@ -163,11 +172,11 @@ public partial class @SphereControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""65318ed8-1244-4b60-a359-b6cef9f60bb5"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
-                    ""action"": ""WeaponSwitch"",
+                    ""action"": ""NextWeapon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -247,6 +256,17 @@ public partial class @SphereControls: IInputActionCollection2, IDisposable
                     ""action"": ""Shoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2584750c-2226-496b-8687-8d5c9e94f71e"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""PreviousWeapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -285,7 +305,8 @@ public partial class @SphereControls: IInputActionCollection2, IDisposable
         m_Sphere = asset.FindActionMap("Sphere", throwIfNotFound: true);
         m_Sphere_Move = m_Sphere.FindAction("Move", throwIfNotFound: true);
         m_Sphere_JoystickAim = m_Sphere.FindAction("JoystickAim", throwIfNotFound: true);
-        m_Sphere_WeaponSwitch = m_Sphere.FindAction("WeaponSwitch", throwIfNotFound: true);
+        m_Sphere_NextWeapon = m_Sphere.FindAction("NextWeapon", throwIfNotFound: true);
+        m_Sphere_PreviousWeapon = m_Sphere.FindAction("PreviousWeapon", throwIfNotFound: true);
         m_Sphere_Stop = m_Sphere.FindAction("Stop", throwIfNotFound: true);
         m_Sphere_AutoAim = m_Sphere.FindAction("AutoAim", throwIfNotFound: true);
         m_Sphere_Shoot = m_Sphere.FindAction("Shoot", throwIfNotFound: true);
@@ -352,7 +373,8 @@ public partial class @SphereControls: IInputActionCollection2, IDisposable
     private List<ISphereActions> m_SphereActionsCallbackInterfaces = new List<ISphereActions>();
     private readonly InputAction m_Sphere_Move;
     private readonly InputAction m_Sphere_JoystickAim;
-    private readonly InputAction m_Sphere_WeaponSwitch;
+    private readonly InputAction m_Sphere_NextWeapon;
+    private readonly InputAction m_Sphere_PreviousWeapon;
     private readonly InputAction m_Sphere_Stop;
     private readonly InputAction m_Sphere_AutoAim;
     private readonly InputAction m_Sphere_Shoot;
@@ -362,7 +384,8 @@ public partial class @SphereControls: IInputActionCollection2, IDisposable
         public SphereActions(@SphereControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Sphere_Move;
         public InputAction @JoystickAim => m_Wrapper.m_Sphere_JoystickAim;
-        public InputAction @WeaponSwitch => m_Wrapper.m_Sphere_WeaponSwitch;
+        public InputAction @NextWeapon => m_Wrapper.m_Sphere_NextWeapon;
+        public InputAction @PreviousWeapon => m_Wrapper.m_Sphere_PreviousWeapon;
         public InputAction @Stop => m_Wrapper.m_Sphere_Stop;
         public InputAction @AutoAim => m_Wrapper.m_Sphere_AutoAim;
         public InputAction @Shoot => m_Wrapper.m_Sphere_Shoot;
@@ -381,9 +404,12 @@ public partial class @SphereControls: IInputActionCollection2, IDisposable
             @JoystickAim.started += instance.OnJoystickAim;
             @JoystickAim.performed += instance.OnJoystickAim;
             @JoystickAim.canceled += instance.OnJoystickAim;
-            @WeaponSwitch.started += instance.OnWeaponSwitch;
-            @WeaponSwitch.performed += instance.OnWeaponSwitch;
-            @WeaponSwitch.canceled += instance.OnWeaponSwitch;
+            @NextWeapon.started += instance.OnNextWeapon;
+            @NextWeapon.performed += instance.OnNextWeapon;
+            @NextWeapon.canceled += instance.OnNextWeapon;
+            @PreviousWeapon.started += instance.OnPreviousWeapon;
+            @PreviousWeapon.performed += instance.OnPreviousWeapon;
+            @PreviousWeapon.canceled += instance.OnPreviousWeapon;
             @Stop.started += instance.OnStop;
             @Stop.performed += instance.OnStop;
             @Stop.canceled += instance.OnStop;
@@ -403,9 +429,12 @@ public partial class @SphereControls: IInputActionCollection2, IDisposable
             @JoystickAim.started -= instance.OnJoystickAim;
             @JoystickAim.performed -= instance.OnJoystickAim;
             @JoystickAim.canceled -= instance.OnJoystickAim;
-            @WeaponSwitch.started -= instance.OnWeaponSwitch;
-            @WeaponSwitch.performed -= instance.OnWeaponSwitch;
-            @WeaponSwitch.canceled -= instance.OnWeaponSwitch;
+            @NextWeapon.started -= instance.OnNextWeapon;
+            @NextWeapon.performed -= instance.OnNextWeapon;
+            @NextWeapon.canceled -= instance.OnNextWeapon;
+            @PreviousWeapon.started -= instance.OnPreviousWeapon;
+            @PreviousWeapon.performed -= instance.OnPreviousWeapon;
+            @PreviousWeapon.canceled -= instance.OnPreviousWeapon;
             @Stop.started -= instance.OnStop;
             @Stop.performed -= instance.OnStop;
             @Stop.canceled -= instance.OnStop;
@@ -454,7 +483,8 @@ public partial class @SphereControls: IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnJoystickAim(InputAction.CallbackContext context);
-        void OnWeaponSwitch(InputAction.CallbackContext context);
+        void OnNextWeapon(InputAction.CallbackContext context);
+        void OnPreviousWeapon(InputAction.CallbackContext context);
         void OnStop(InputAction.CallbackContext context);
         void OnAutoAim(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);

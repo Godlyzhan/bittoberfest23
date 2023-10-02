@@ -674,7 +674,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6659169433219654020}
         m_TargetAssemblyTypeName: InputHandler, Assembly-CSharp
-        m_MethodName: OnWeaponSwitch
+        m_MethodName: OnNextWeapon
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -722,6 +722,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 88cfb716-a919-4177-af69-7c6adbe22089
     m_ActionName: Sphere/Shoot[/DualSenseGamepadHID/rightShoulder,/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6659169433219654020}
+        m_TargetAssemblyTypeName: InputHandler, Assembly-CSharp
+        m_MethodName: OnPreviousWeapon
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 22d4dd72-72a0-48a2-8199-2f9ea792af9a
+    m_ActionName: Sphere/PreviousWeapon[/DualSenseGamepadHID/leftShoulder]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Mouse
   m_DefaultActionMap: Sphere
