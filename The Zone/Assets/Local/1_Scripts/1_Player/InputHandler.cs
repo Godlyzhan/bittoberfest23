@@ -7,6 +7,9 @@ public class InputHandler : MonoBehaviour, SphereControls.ISphereActions
     public event Action NextWeaponSwitchEvent;
     public event Action PreviousWeaponSwitchEvent;
     public event Action ShootEvent;
+    
+    public bool Shoot { get; set; }
+    public bool ReleaseShot { get; set; }
     public Vector2 MovementValue { get; private set; }
     public Vector2 AimValue { get; private set; }
     public bool StopMovement { get; private set; }
@@ -26,7 +29,19 @@ public class InputHandler : MonoBehaviour, SphereControls.ISphereActions
 
     public void OnShoot(InputAction.CallbackContext context)
     {
-        if (context.performed) ShootEvent?.Invoke();
+        if (context.performed)
+        {
+            ShootEvent?.Invoke();
+            Shoot = true;
+            ReleaseShot = false;
+        }
+
+        if (context.canceled)
+        {
+            Shoot = false;
+            ReleaseShot = true;
+        }
+        
     }
 
     public void OnStop(InputAction.CallbackContext context)
