@@ -3,6 +3,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class SphereMovement : MonoBehaviour
 {
+    [field:SerializeField] public WeaponHandler WeaponHandler { get; set; }
+    
     [SerializeField] private InputHandler inputHandler;
     [SerializeField] private float inputMultiplier = 100f;
     [SerializeField] private float rotationalDamping = 0.2f;

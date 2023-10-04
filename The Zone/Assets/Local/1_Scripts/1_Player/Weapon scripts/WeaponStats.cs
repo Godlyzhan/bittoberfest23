@@ -3,7 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "WeaponStats", menuName = "CreateWeapon/WeaponStats", order = 1)]
 public class WeaponStats : ScriptableObject
 {
-    public Weapons.WeaponsTypes WeaponType;
+    public WeaponTypes.WeaponsTypes WeaponType;
 
     public float FireRate;
     public float BulletSpeed;

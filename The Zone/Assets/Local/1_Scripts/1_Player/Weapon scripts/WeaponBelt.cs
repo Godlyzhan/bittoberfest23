@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Controls the rotation of the belt surrounding the player
+/// </summary>
 public class WeaponBelt : MonoBehaviour
 {
     [SerializeField] private Transform playerPosition;
