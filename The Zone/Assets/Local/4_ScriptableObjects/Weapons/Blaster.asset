@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Blaster
   m_EditorClassIdentifier: 
   WeaponType: 1
-  FireRate: 0
-  BulletSpeed: 1
-  ImpactForce: 1
-  Damage: 1
-  Cooldown: 1
-  prefab: {fileID: 6194285580146473883, guid: 0cb1ec1618a4c0a4abee0be1711fd629, type: 3}
-  AnimatorOverrideController: {fileID: 0}
+  bulletPrefab: {fileID: 0}
+  minScale: 0.5
+  maxScale: 2
+  maxHoldTime: 2
+  minForce: 5
+  maxForce: 20
+  maxDamage: 100

@@ -5,11 +5,14 @@ public class WeaponStats : ScriptableObject
 {
     public WeaponTypes.WeaponsTypes WeaponType;
 
-    public float FireRate;
-    public float BulletSpeed;
-    public float ImpactForce;
-    public float Damage;
-    public float Cooldown;
-    public GameObject prefab;
-    public AnimatorOverrideController AnimatorOverrideController;
+    [Header("Blaster Stats")]
+    public GameObject bulletPrefab;
+    public float minScale = 0.5f;
+    public float maxScale = 2.0f;
+    public float maxHoldTime = 2.0f;
+    public float minForce = 5.0f;
+    public float maxForce = 20.0f;
+    public float maxDamage = 100.0f;
+    public float coolDown = 2f;
+
 }

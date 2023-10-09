@@ -59,5 +59,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Blaster
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6469378455066509328, guid: 0cb1ec1618a4c0a4abee0be1711fd629, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 0cb1ec1618a4c0a4abee0be1711fd629, type: 3}

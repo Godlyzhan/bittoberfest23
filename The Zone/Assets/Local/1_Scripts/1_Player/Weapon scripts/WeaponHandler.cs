@@ -15,18 +15,24 @@ public class WeaponHandler : MonoBehaviour
     private int currentActiveWeapon = 0;
     private int weaponCount = 0;
     private int maxWeaponCount = 4;
-    private int minWeaponCount = 4;
-
-    private float blasterPowerUp;
-    private float blasterMaxPower = 10.0f;
+    private int minWeaponCount = 0;
 
     private bool weaponSwapped;
+
+    //Blaster 
+    private GameObject currentBullet;
+    private float chargeStartTime;
+    private bool isCharging = false;
+    private float chargeTime;
+    private float coolDownTime;
+    private Rigidbody bulletRigidBody;
 
     private void OnEnable()
     {
         inputHandler.NextWeaponSwitchEvent += NextWeapon;
         inputHandler.PreviousWeaponSwitchEvent += PreviousWeapon;
         inputHandler.ShootEvent += Shoot;
+        inputHandler.ReleaseShotEvent += FireBaster;
 
         activeWeaponStats = weaponStatsList[0];
     }
@@ -36,11 +42,21 @@ public class WeaponHandler : MonoBehaviour
         inputHandler.NextWeaponSwitchEvent -= NextWeapon;
         inputHandler.PreviousWeaponSwitchEvent -= PreviousWeapon;
         inputHandler.ShootEvent -= Shoot;
+        inputHandler.ReleaseShotEvent -= FireBaster;
     }
 
     private void Update()
     {
-            
+        coolDownTime += Time.deltaTime;
+
+        if (isCharging && coolDownTime > activeWeaponStats.coolDown)
+        {
+            chargeStartTime += Time.deltaTime;
+            chargeTime = Mathf.Clamp(chargeStartTime, 0, activeWeaponStats.maxHoldTime);
+            float scale = Mathf.Lerp(activeWeaponStats.minScale, activeWeaponStats.maxScale, chargeTime / activeWeaponStats.maxHoldTime);
+            currentBullet.transform.localScale = new Vector3(scale, scale, scale);
+            currentBullet.transform.position = ShootingPoint.transform.position;
+        }
     }
 
     public void SetGameObjectPosition(GameObject pickObject, WeaponStats weaponStats)
@@ -57,7 +73,7 @@ public class WeaponHandler : MonoBehaviour
 
     private void NextWeapon()
     {
-        currentActiveWeapon = currentActiveWeapon > minWeaponCount ? currentActiveWeapon-- : maxWeaponCount;
+        currentActiveWeapon = currentActiveWeapon > minWeaponCount ? currentActiveWeapon - 1: maxWeaponCount;
         activeWeaponStats = weaponStatsList[currentActiveWeapon];
 
         var newRotation = transform.eulerAngles.y + 72;
@@ -66,9 +82,9 @@ public class WeaponHandler : MonoBehaviour
 
     private void PreviousWeapon()
     {
-        currentActiveWeapon = currentActiveWeapon < maxWeaponCount ? currentActiveWeapon++ : minWeaponCount;
+        currentActiveWeapon = currentActiveWeapon < maxWeaponCount ? currentActiveWeapon + 1: minWeaponCount;
         activeWeaponStats = weaponStatsList[currentActiveWeapon];
-        
+
         var newRotation = transform.eulerAngles.y - 72;
         transform.rotation = Quaternion.Euler(0f, newRotation, 0f);
     }
@@ -78,6 +94,8 @@ public class WeaponHandler : MonoBehaviour
         switch (activeWeaponStats.WeaponType)
         {
             case WeaponTypes.WeaponsTypes.Blaster:
+                Debug.Log("Blaster");
+                PowerUpBlaster();
                 break;
             case WeaponTypes.WeaponsTypes.Shield:
                 Shield();
@@ -97,41 +115,39 @@ public class WeaponHandler : MonoBehaviour
         }
     }
 
-    private void PowerUpBlaster(float power)
+    private void PowerUpBlaster()
     {
-        if (activeWeaponStats.WeaponType != WeaponTypes.WeaponsTypes.Blaster)
+        isCharging = true;
+        currentBullet = Instantiate(activeWeaponStats.bulletPrefab, ShootingPoint.position, Quaternion.identity);
+        currentBullet.transform.localScale = Vector3.zero;
+        bulletRigidBody = currentBullet.GetComponent<Rigidbody>();
+    }
+
+    private void FireBaster()
+    {
+        if (!isCharging && coolDownTime < activeWeaponStats.coolDown)
         {
             return;
         }
 
-        if (inputHandler.Shoot && blasterPowerUp < blasterMaxPower)
+        float force = Mathf.Lerp(activeWeaponStats.minForce, activeWeaponStats.maxForce, chargeTime / activeWeaponStats.maxHoldTime);
+        float damage = Mathf.Lerp(0, activeWeaponStats.maxDamage, chargeTime / activeWeaponStats.maxHoldTime);
+
+        bulletRigidBody.velocity = Vector3.zero;
+        bulletRigidBody.AddForce(ShootingPoint.forward * force, ForceMode.Impulse);
+
+        // Apply damage logic to the bullet
+        /*BulletDamage bulletDamage = currentBullet.GetComponent<BulletDamage>();
+        if (bulletDamage != null)
         {
-            GameObject bullet = Instantiate(activeWeaponStats.prefab, ShootingPoint.position, Quaternion.identity); 
-            Rigidbody rigidbody = bullet.GetComponent<Rigidbody>();
+            bulletDamage.SetDamage(damage);
+        }*/
 
-        bullet.transform.localScale += new Vector3(power, power, power);
-
-            previousWeaponType = WeaponTypes.WeaponsTypes.Blaster;
-
-          
-                blasterPowerUp += Time.deltaTime;
-            }
-            else if(inputHandler.ReleaseShot)
-            {
-               // FireBaster(blasterPowerUp, rigidbody);
-                blasterPowerUp = 0.0f;
-            }
-        
-    }
-
-    private void FireBaster(float power, Rigidbody rigidbody)
-    {
-        float damage = activeWeaponStats.Damage * (power * 10);
-        float force = activeWeaponStats.ImpactForce * (power * 10);
-        float speed =  activeWeaponStats.BulletSpeed * (power * 10);
-        
-        rigidbody.velocity = ShootingPoint.forward * speed;
-        
+        coolDownTime = 0f;
+        chargeTime = 0f;
+        isCharging = false;
+        chargeStartTime = 0f;
+        Destroy(currentBullet.gameObject, 5f);
         //Needs to power up 
         //Scales up as the power increases
         //shoots when the power is released

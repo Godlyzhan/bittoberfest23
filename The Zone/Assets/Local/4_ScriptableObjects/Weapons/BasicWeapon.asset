@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8708fd820c6fa064aab0f294193cbf08, type: 3}
   m_Name: BasicWeapon
   m_EditorClassIdentifier: 
-  WeaponType: 4
-  FireRate: 1
-  BulletSpeed: 200
-  ImpactForce: 12
-  Damage: 2
-  Cooldown: 0.1
-  prefab: {fileID: 6194285580146473883, guid: 0cb1ec1618a4c0a4abee0be1711fd629, type: 3}
-  AnimatorOverrideController: {fileID: 0}
+  WeaponType: 1
+  bulletPrefab: {fileID: 186647492754725733, guid: 3b3049837e8afcf48a7259990268f2f7, type: 3}
+  minScale: 0.5
+  maxScale: 5
+  maxHoldTime: 5
+  minForce: 10
+  maxForce: 100
+  maxDamage: 100
+  coolDown: 0.2
