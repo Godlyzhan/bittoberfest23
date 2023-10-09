@@ -76,7 +76,7 @@ public class WeaponHandler : MonoBehaviour
         currentActiveWeapon = currentActiveWeapon > minWeaponCount ? currentActiveWeapon - 1: maxWeaponCount;
         activeWeaponStats = weaponStatsList[currentActiveWeapon];
 
-        var newRotation = transform.eulerAngles.y + 72;
+        var newRotation = Mathf.Lerp(transform.eulerAngles.y , transform.eulerAngles.y + 72, 0.5f);
         transform.rotation = Quaternion.Euler(0f, newRotation, 0f);
     }
 
@@ -85,7 +85,7 @@ public class WeaponHandler : MonoBehaviour
         currentActiveWeapon = currentActiveWeapon < maxWeaponCount ? currentActiveWeapon + 1: minWeaponCount;
         activeWeaponStats = weaponStatsList[currentActiveWeapon];
 
-        var newRotation = transform.eulerAngles.y - 72;
+        var newRotation = Mathf.Lerp(transform.eulerAngles.y , transform.eulerAngles.y - 72, 0.5f);
         transform.rotation = Quaternion.Euler(0f, newRotation, 0f);
     }
 
@@ -94,7 +94,6 @@ public class WeaponHandler : MonoBehaviour
         switch (activeWeaponStats.WeaponType)
         {
             case WeaponTypes.WeaponsTypes.Blaster:
-                Debug.Log("Blaster");
                 PowerUpBlaster();
                 break;
             case WeaponTypes.WeaponsTypes.Shield:
@@ -136,23 +135,11 @@ public class WeaponHandler : MonoBehaviour
         bulletRigidBody.velocity = Vector3.zero;
         bulletRigidBody.AddForce(ShootingPoint.forward * force, ForceMode.Impulse);
 
-        // Apply damage logic to the bullet
-        /*BulletDamage bulletDamage = currentBullet.GetComponent<BulletDamage>();
-        if (bulletDamage != null)
-        {
-            bulletDamage.SetDamage(damage);
-        }*/
-
         coolDownTime = 0f;
         chargeTime = 0f;
         isCharging = false;
         chargeStartTime = 0f;
         Destroy(currentBullet.gameObject, 5f);
-        //Needs to power up 
-        //Scales up as the power increases
-        //shoots when the power is released
-        //Speed, damage and force are in relation to how much it been powered up
-        //this all used energy have to steal energy from NPC/power sources
     }
 
     private void Shield()
